@@ -1,0 +1,98 @@
+
+service: serverless-swapi
+
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: ap-southeast-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: arn:aws:dynamodb:ap-southeast-1:*:*
+
+resources:
+  Resources:
+    VehiclesTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: 'vehicles'
+    PeopleTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: 'people'
+        
+
+functions:
+  createVehicle:
+    handler: src/handler/vehicles/createVehicle.createVehicle
+    events: 
+      - http: 
+          path: vehicles
+          method: post
+          cors: true
+  listVehicle:
+    handler: src/handler/vehicles/listVehicle.listVehicle
+    events: 
+      - http: 
+          path: vehicles
+          method: get
+          cors: true
+  getVehicle:
+    handler: src/handler/vehicles/getVehicle.getVehicle
+    events:
+      - http:
+          path: vehicles/{id}
+          method: get
+          cors: true
+  createPeople:
+    handler: src/handler/people/createPeople.createPeople
+    events:
+      - http:
+          path: people
+          method: post
+          cors: true
+  listPeople:
+    handler: src/handler/people/listPeople.listPeople
+    events:
+      - http:
+          path: people
+          method: get
+          cors: true
+  getPeople:
+    handler: src/handler/people/getPeople.getPeople
+    events:
+      - http:
+          path: people/{id}
+          method: get
+          cors: true
