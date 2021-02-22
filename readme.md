@@ -3,8 +3,8 @@
 ## About the Project 
 
 The status microservice exposes 2 main services.
-- **Vehicle**: allow to insert, get by Id,  and get a list of statuses
-- **People**: allow to insert, get by Id and get a list of substatuses
+- **Vehicle**: allow to insert, get by Id,  and get a list of vehicles.
+- **People**: allow to insert, get by Id and get a list of people.
 
 #### Build With
 
